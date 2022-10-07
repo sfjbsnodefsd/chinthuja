@@ -1,0 +1,22 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "first program",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sfjbsnodefsd/chinthuja.git"
+  },
+  "author": "Chinthuja",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "bugs": {
+    "url": "https://github.com/sfjbsnodefsd/chinthuja/issues"
+  },
+  "homepage": "https://github.com/sfjbsnodefsd/chinthuja#readme"
+}
