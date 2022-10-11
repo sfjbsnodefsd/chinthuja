@@ -7,28 +7,29 @@ const jwt = require("jsonwebtoken");
 app.use(express.json());
 
 mongoose.connect(
-  "mongodb://localhost:27017/authorization service",
+  "mongodb://localhost:27017/auth-service",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   },
   () => {
-    console.log(`authorization service DB  Connected`);
+    console.log(`auth service DB  Connected`);
   }
 );
 
 // register
 app.post("/auth/reg", async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name,aadhar_no } = req.body;
 
   const userExists = await User.findOne({ email });
   if (userExists) {
-    return res.json({ sucess: 0, message: "User already exists" });
+    return res.json({ success: 0, message: "User already exists" });
   } else {
     const newUser = new User({
       name,
       email,
       password,
+      aadhar_no
     });
     newUser.save();
     return res.json(newUser);
@@ -42,10 +43,10 @@ app.post("/auth/login", async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    return res.json({ sucess: 0, message: "User dose not exist" });
+    return res.json({ success: 0, message: "User dose not exist" });
   } else {
     if (password !== user.password) {
-      return res.json({ sucess: 0, message: "Incorrect password" });
+      return res.json({ success: 0, message: "Incorrect password" });
     }
     const payload = {
       email,
