@@ -5,6 +5,7 @@ const PORT = 5000;
 const User = require("./User");
 const jwt = require("jsonwebtoken");
 app.use(express.json());
+const csvFile=require("csvtojson");
 
 mongoose.connect(
   "mongodb://localhost:27017/auth-service",
@@ -17,9 +18,26 @@ mongoose.connect(
   }
 );
 
+csvFile().fromFile("./login.csv").then(async (response) => {
+  for (var x = 0; x < response.length; x++) {
+  const email = await User.findOne({ email: response[x].email });
+  if (email) 
+  continue;
+  const credential= new User({
+  name: response[x].name,
+ email: response[x].email,
+  password: response[x].password,
+  aadhar_no: response[x].aadhar_no,
+ 
+  });
+credential.save(); 
+  }
+  
+  })
+  
 // register
 app.post("/auth/reg", async (req, res) => {
-  const { email, password, name,aadhar_no } = req.body;
+  const { name , email, password} = req.body;
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -29,7 +47,7 @@ app.post("/auth/reg", async (req, res) => {
       name,
       email,
       password,
-      aadhar_no
+   
     });
     newUser.save();
     return res.json(newUser);
