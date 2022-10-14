@@ -20,13 +20,10 @@ mongoose.connect(
   }
 );
 
-app.post("/pensionprocess", isAuthenticated, async (req, res) => {
+app.post("/pensionprocess",  async (req, res) => {
   const { aadhaar_no } = req.body;
      let response = await getPensioner(aadhaar_no);
-    if (!response.success) {
-      throw new Error(response.err);
-    }
-    const { pension_type, salary, allowances, bank_details } =response;
+      const { pension_type, salary, allowances, bank_details } =response;
       
     const pension = getPension(pension_type);
     if (pension === null) {
@@ -47,7 +44,7 @@ app.post("/pensionprocess", isAuthenticated, async (req, res) => {
 
   const getPensioner = (aadhaar_no) =>
   new Promise((resolve, reject) => {
-    request(`http://localhost:5002/pensioner/${aadhaar_no}`,{ json: true },(err, res, body) => {
+    request.get(`http://localhost:5002/getPensioner/${aadhaar_no}`,{ json: true },(err, res, body) => {
         if (err) {
           console.log(err);
           return reject(err); 
@@ -58,9 +55,9 @@ app.post("/pensionprocess", isAuthenticated, async (req, res) => {
   });
 const getPension = (pension_type) => {
  var percentage = null;
-if(pension_type.toUpperCase()=="SELF") {
+if(pension_type=="Self") {
   percentage = 80;}
-  else if(pension_type.toUpperCase()=="FAMILY") {
+  else if(pension_type=="Family") {
   percentage = 50;
   }
   return percentage;
@@ -69,11 +66,11 @@ if(pension_type.toUpperCase()=="SELF") {
 const getServiceCharge = (bank_type) => {
 var serviceCharge = null;
 
-  if(bank_type.toUpperCase()=="PUBLIC") {
+  if(bank_type=="Public") {
     
       serviceCharge = 500;
   }
- else if(bank_type.toUpperCase()=="PRIVATE") {
+ else if(bank_type=="Private") {
       serviceCharge = 550;
       }
   return serviceCharge;
