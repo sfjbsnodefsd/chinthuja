@@ -18,37 +18,30 @@ mongoose.connect(
   }
 );
 
-csvFile().fromFile("./pensionerDetails.csv").then(async (response) => {
-for (var x = 0; x < response.length; x++) {
-const pensioner = await Detail.findOne({ aadhar_no: response[x].aadhar_no });
+csvFile().fromFile("./pensionerDetails.csv").then(async (res) => {
+for (var x = 0; x < res.length; x++) {
+const pensioner = await Detail.findOne({ aadhar_no: res[x].aadhar_no });
 if (pensioner) 
 continue;
-const pensionerDetail = new Detail({
-name: response[x].name,
-DOB: response[x].DOB,
-PAN: response[x].PAN,
-aadhar_no: response[x].aadhar_no,
-salary: response[x].salary,
-allowances: response[x].allowances,
-pension_type: response[x].pension_type,
+const pensionDetail = new Detail({
+name: res[x].name,
+DOB: res[x].DOB,
+PAN: res[x].PAN,
+aadhar_no: res[x].aadhar_no,
+salary: res[x].salary,
+allowances: res[x].allowances,
+pension_type: res[x].pension_type,
 bank_details: {
-bank_name: response[x].bank_name,
-acc_no: response[x].acc_no,
-bank_type: response[x].bank_type
+bank_name: res[x].bank_name,
+acc_no: res[x].acc_no,
+bank_type: res[x].bank_type
 },
 });
-pensionerDetail.save(); 
+pensionDetail.save(); 
 }
-
 })
 
-
-
-
-
-
-// add a new pensioner
-app.post("/getPensioner", (req, res) => {
+app.post("/postPensioner", (req, res) => {
   const {name,DOB,PAN,aadhaar_no,salary,allowances,pension_type,bank_details} = req.body;
 
   const newPensioner = new Detail({
@@ -70,10 +63,11 @@ app.post("/getPensioner", (req, res) => {
       res.status(500).json({ success: 0, message: "Some error occured", err: err })
     );
 });
+
 app.get("/getPensioner/:aadhaar_no", async (req, res) => {
-  const { aadhaar_no } = req.params;
+  
  
-    const response = await Detail.findOne({ aadhaar_no: aadhaar_no });
+    const response = await Detail.findOne({ aadhaar_no: req.params.aadhaar_no });
     if(!response) {
       throw new Error('No data found for provided aadhaar number');
     }
@@ -84,6 +78,8 @@ app.get("/getPensioner/:aadhaar_no", async (req, res) => {
   
   }
 );
+
+
 
 app.listen(5002, () => {
   console.log(`pensioner detail service is working at port 5002`);
