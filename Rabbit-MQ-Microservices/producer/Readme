@@ -1,0 +1,1 @@
+to start rabbit mq server docker run --name rabbitmq -p 5672:5672 rabbitmq
