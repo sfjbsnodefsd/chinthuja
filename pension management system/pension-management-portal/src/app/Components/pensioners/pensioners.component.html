@@ -1,0 +1,12 @@
+<h1 style="text-align: center ; border-style: groove ; border-color: #7959FF;" class= "display-2">List of Registered Pensioners</h1>
+<br />
+<select name = "aadhaars" id="aadhaars" (change) = "newPensioner($any($event))">
+    <option>All</option>
+    <option *ngFor ="let p of pensionersCopy; index as i" value="{{p.aadhaarNo}}">{{p.aadhaarNo}}</option>
+</select>
+<table class="table table-striped">
+    <thead><th>Name</th><th>Aadhaar</th><th>DOB</th><th>PAN</th><th>Salary</th><th>Self/Family</th><th>Allowances</th><th>Bank</th><th>Account No.</th><th>Public/Private</th></thead>
+    <tr *ngFor ="let p of pensioners; index as i"><td>{{p.name }}</td><td>{{p.aadhaarNo }}</td><td>{{p.DOB }}</td><td>{{p.PAN }}</td><td>{{p.salary }}</td><td>{{p.pension_type }}</td>
+        <td>{{p.allowances }}</td><td>{{p.bank_details.bank_name }}</td><td>{{p.bank_details.acc_no }}</td><td>{{p.bank_details.bank_type }}</td>
+        <td><button type="button" style="color: red; background-color: red;" (click)="deleteRow(p,i)" class = "btn-close" aria-label="Close"></button></td></tr>
+</table>

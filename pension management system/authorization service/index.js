@@ -6,7 +6,8 @@ const User = require("./User");
 const jwt = require("jsonwebtoken");
 app.use(express.json());
 const csvFile=require("csvtojson");
-
+const cors = require("cors");
+app.use(cors());
 mongoose.connect(
   "mongodb://localhost:27017/auth-service",
   {
@@ -27,7 +28,7 @@ csvFile().fromFile("./login.csv").then(async (response) => {
   name: response[x].name,
  email: response[x].email,
   password: response[x].password,
-  aadhar_no: response[x].aadhar_no,
+ 
  
   });
 credential.save(); 
